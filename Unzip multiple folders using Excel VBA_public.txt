@@ -1,0 +1,45 @@
+'Use this code to Unzip multiple files and save the unzipped files
+'to a folder with the same name as the zip file.
+'Note: There is no "on error" built into this code.
+
+Sub Unzip()
+
+    'Get File Names
+    Dim oFSO As Object
+    Dim oFolder As Object
+    Dim oFile As Object
+    Dim i As Integer
+
+    Set oFSO = CreateObject("Scripting.FileSystemObject")
+    Set oFolder = oFSO.GetFolder("C:\Users\Folder Path\zipped") 'Replace everything in "" with your folder path
+
+        For Each oFile In oFolder.Files
+
+        Cells(i + 1, 1) = oFile.Name
+
+        i = i + 1
+
+    Dim zipFileName As String
+    Dim unZipFolderName As String
+    Dim objZipItems As FolderItems
+    Dim objZipItem As FolderItem
+    
+        'Set Zip File Name & Folder path to Unzip
+        zipFileName = "C:\Users\Folder Path\zipped\" + oFile.Name 'Replace everything in "" with your folder path
+        unZipFolderName = "C:\Users\Folder Path\unZipped\" + oFile.Name   'Replace everything in "" with your folder path
+    
+    'Early Binding Reference
+    'Add Tools -> Reference -> "Microsoft Shell Controls & Automation"
+    Dim wShApp As Shell
+    Set wShApp = CreateObject("Shell.Application")
+    Set objZipItems = wShApp.Namespace(zipFileName).Items
+    
+        'Create New Folder in Unzip Directory
+        MkDir unZipFolderName
+    
+        'Extract: Unzip all Files to Folder
+        wShApp.Namespace(unZipFolderName).CopyHere objZipItems
+
+    Next oFile
+    
+End Sub
